@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:id="@+id/name" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switch1"
+        android:focusable="false"
+        android:checked="false" />
+
+</LinearLayout><!-- From: file:/C:/Users/Navin/AndroidStudioProjects/NavigationDrawer1/app/src/main/res/layout/device_item.xml -->
