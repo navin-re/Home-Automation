@@ -21,6 +21,9 @@ public class AddDeviceFragment extends DialogFragment  {
     public  static final  String ARG_DEVICE_NAME = "device_name";
     public  static final  String ARG_DEVICE_MESSAGE = "device_message";
     public static  final String MODIFY_DEVICE = "modify_device";
+    public  static final  String ARG_DEVICE_TOPIC = "device_topic";
+    public  static final  String ARG_DEVICE_MESSAGE_ON = "device_message_on";
+    public  static final  String ARG_DEVICE_MESSAGE_OFF = "device_name_off";
 
 	public interface AddDeviceListener {
 		public void onAddDevicePostive(DialogFragment dialog,boolean modify,int position);
@@ -59,10 +62,14 @@ public class AddDeviceFragment extends DialogFragment  {
 		// Inflate and set the layout for the dialog
 		// Pass null as the parent view because its going in the dialog layout
         if(modify) {
+            TextView devTopic = (TextView) thisView.findViewById(R.id.topic);
             TextView devName = (TextView) thisView.findViewById(R.id.dev_name);
-            TextView devMessage = (TextView) thisView.findViewById(R.id.dev_message);
+            TextView devMessageOn = (TextView) thisView.findViewById(R.id.dev_message_on);
+            TextView devMessageOff = (TextView) thisView.findViewById(R.id.dev_message_off);
+            devTopic.setText(getArguments().getCharSequence(ARG_DEVICE_TOPIC));
             devName.setText(getArguments().getCharSequence(ARG_DEVICE_NAME));
-            devMessage.setText(getArguments().getCharSequence(ARG_DEVICE_MESSAGE));
+            devMessageOn.setText(getArguments().getCharSequence(ARG_DEVICE_MESSAGE_ON));
+            devMessageOff.setText(getArguments().getCharSequence(ARG_DEVICE_MESSAGE_OFF));
         }
 		builder.setView(thisView)
 				// Add action buttons

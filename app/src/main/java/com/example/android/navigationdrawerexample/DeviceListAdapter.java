@@ -64,30 +64,52 @@ public class DeviceListAdapter extends ArrayAdapter<Device> {
 
         viewHolder.devName.setText(item.deviceName);
         viewHolder.devSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                MemoryPersistence memoryPersistence = new MemoryPersistence();
-                                client = new MqttClient("tcp://iot.eclipse.org:1883","HomeAutomation",memoryPersistence);
-                                client.connect();
-                                Log.d("MQTT","Client is Connected");
-                                MqttMessage message = new MqttMessage();
-                                message.setPayload(item.deviceMessage.getBytes());
-                                client.publish("1", message);
-                                Log.d("MQTT","Message Published");
-                                client.disconnect();
-                            } catch (MqttException e) {
-                                e.printStackTrace();
-                            }
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if(isChecked) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        MemoryPersistence memoryPersistence = new MemoryPersistence();
+                                        client = new MqttClient("tcp://iot.eclipse.org:1883", "HomeAutomation", memoryPersistence);
+                                        client.connect();
+                                        Log.d("MQTT", "Client is Connected");
+                                        MqttMessage message = new MqttMessage();
+                                        message.setPayload(item.deviceMessageOn.getBytes());
+                                        client.publish(item.deviceTopic, message);
+                                        Log.d("MQTT", "Message Published");
+                                        client.disconnect();
+                                    } catch (MqttException e) {
+                                        e.printStackTrace();
+                                    }
 
+                                }
+                            }).start();
+                            Toast.makeText(getContext(), "Message \"" + item.deviceMessageOn + "\" is Published", Toast.LENGTH_SHORT).show();
                         }
-                    }).start();
-                    Toast.makeText(getContext(),"Message \""+ item.deviceMessage+"\" is Published",Toast.LENGTH_SHORT).show();
-                }
+                        else {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        MemoryPersistence memoryPersistence = new MemoryPersistence();
+                                        client = new MqttClient("tcp://iot.eclipse.org:1883", "HomeAutomation", memoryPersistence);
+                                        client.connect();
+                                        Log.d("MQTT", "Client is Connected");
+                                        MqttMessage message = new MqttMessage();
+                                        message.setPayload(item.deviceMessageOff.getBytes());
+                                        client.publish(item.deviceTopic, message);
+                                        Log.d("MQTT", "Message Published");
+                                        client.disconnect();
+                                    } catch (MqttException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            }).start();
+                            Toast.makeText(getContext(), "Message \"" + item.deviceMessageOff + "\" is Published", Toast.LENGTH_SHORT).show();
+                        }
             }
         });
         return convertView;

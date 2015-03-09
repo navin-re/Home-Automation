@@ -182,16 +182,19 @@ public class MainActivity extends Activity implements AddDeviceFragment.AddDevic
 
     @Override
     public void onAddDevicePostive(DialogFragment dialog,boolean modify,int position) {
+        EditText devTopic = (EditText) dialog.getDialog().findViewById(R.id.topic);
+        EditText devName = (EditText) dialog.getDialog().findViewById(R.id.dev_name);
+        EditText devMessageOn = (EditText) dialog.getDialog().findViewById(R.id.dev_message_on);
+        EditText devMessageOff = (EditText) dialog.getDialog().findViewById(R.id.dev_message_off);
         if(modify) {
-            EditText devName = (EditText) dialog.getDialog().findViewById(R.id.dev_name);
-            EditText devMessage = (EditText) dialog.getDialog().findViewById(R.id.dev_message);
+            rooms.getDevice(currentRoom,position).deviceTopic = devTopic.getText().toString();
             rooms.getDevice(currentRoom,position).deviceName = devName.getText().toString();
-            rooms.getDevice(currentRoom,position).deviceMessage = devMessage.getText().toString();
+            rooms.getDevice(currentRoom,position).deviceMessageOn = devMessageOn.getText().toString();
+            rooms.getDevice(currentRoom,position).deviceMessageOff = devMessageOff.getText().toString();
         }
         else {
-            EditText devName = (EditText) dialog.getDialog().findViewById(R.id.dev_name);
-            EditText devMessage = (EditText) dialog.getDialog().findViewById(R.id.dev_message);
-            rooms.addDevice(currentRoom,new Device(devName.getText().toString(),devMessage.getText().toString(),false));
+            rooms.addDevice(currentRoom,new Device(devTopic.getText().toString(), devName.getText().toString(), devMessageOn.getText().toString(), devMessageOff.getText().toString(), false
+            ));
         }
     }
 
@@ -218,8 +221,8 @@ public class MainActivity extends Activity implements AddDeviceFragment.AddDevic
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
-        }
+        selectItem(position);
+    }
     }
 
     public  class Room {
@@ -278,7 +281,7 @@ public class MainActivity extends Activity implements AddDeviceFragment.AddDevic
         else {
             Fragment fragment = new DeviceList();
             Bundle args = new Bundle();
-            args.putInt(DeviceList.ARG_DEVICE_POSTION, position);
+            args.putInt(DeviceList.ARG_ROOM_POSTION, position);
             fragment.setArguments(args);
 
             FragmentManager fragmentManager = getFragmentManager();

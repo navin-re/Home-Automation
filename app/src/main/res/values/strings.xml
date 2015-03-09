@@ -21,6 +21,7 @@
     <string name="dev_name">Name</string>
     <string name="dev_message">Message</string>
     <string name="room_name">Room Name</string>
+    <string name="topic">Topic</string>
     <string-array name="Options">
         <item>Modify</item>
         <item>Delete</item>

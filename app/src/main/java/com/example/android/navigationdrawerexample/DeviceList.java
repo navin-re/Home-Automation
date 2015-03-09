@@ -23,12 +23,15 @@ import java.util.List;
  */
 public class DeviceList extends ListFragment {
 
+    public  static final  String ARG_ROOM_POSTION = "room_number";
     public  static final  String ARG_DEVICE_POSTION = "device_number";
     public  static final  String ARG_DEVICE_NAME = "device_name";
-    public  static final  String ARG_DEVICE_MESSAGE = "device_message";
+    public  static final  String ARG_DEVICE_TOPIC = "device_topic";
+    public  static final  String ARG_DEVICE_MESSAGE_ON = "device_message_on";
+    public  static final  String ARG_DEVICE_MESSAGE_OFF = "device_name_off";
     public static  final String MODIFY_DEVICE = "modify_device";
     public static ArrayList<Device> devices;
-    public static int pos;
+    public static int posRoom;
    public static ArrayAdapter arrayAdapter;
 
 /*    @Override
@@ -43,8 +46,8 @@ public class DeviceList extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceBundle) {
         super.onActivityCreated(savedInstanceBundle);
-        pos = getArguments().getInt(ARG_DEVICE_POSTION);
-        devices = MainActivity.rooms.getRoom(pos);
+        posRoom = getArguments().getInt(ARG_ROOM_POSTION);
+        devices = MainActivity.rooms.getRoom(posRoom);
         final ArrayAdapter adapter =new DeviceListAdapter(getActivity(), devices);
         this.arrayAdapter = adapter;
         setListAdapter(adapter);
@@ -52,6 +55,9 @@ public class DeviceList extends ListFragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 DialogFragment options = new optionsDialog();
+                Bundle bundle = new Bundle();
+                bundle.putInt(ARG_DEVICE_POSTION,position);
+                options.setArguments(bundle);
                 options.show(getFragmentManager(),"Options");
                 return false;
             }
@@ -67,21 +73,24 @@ public class DeviceList extends ListFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceBundle) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final int devPos = getArguments().getInt(ARG_DEVICE_POSTION);
             builder.setTitle("Options").setItems(R.array.Options,new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                    if(which == 0) {
                        DialogFragment modify = new AddDeviceFragment();
                        Bundle args = new Bundle();
-                       args.putInt(ARG_DEVICE_POSTION,pos);
+                       args.putInt(ARG_DEVICE_POSTION,devPos);
                        args.putBoolean(MODIFY_DEVICE,true);
-                       args.putCharSequence(ARG_DEVICE_NAME,devices.get(pos).deviceName);
-                       args.putCharSequence(ARG_DEVICE_MESSAGE,devices.get(pos).deviceMessage);
+                       args.putCharSequence(ARG_DEVICE_TOPIC,devices.get(devPos).deviceTopic);
+                       args.putCharSequence(ARG_DEVICE_NAME,devices.get(devPos).deviceName);
+                       args.putCharSequence(ARG_DEVICE_MESSAGE_ON,devices.get(devPos).deviceMessageOn);
+                       args.putCharSequence(ARG_DEVICE_MESSAGE_OFF,devices.get(devPos).deviceMessageOff);
                        modify.setArguments(args);
                        modify.show(getFragmentManager(),"Modify");
                    }
                  else {
-                       MainActivity.rooms.removeDevice(pos);
+                       MainActivity.rooms.removeDevice(devPos);
                        arrayAdapter.notifyDataSetChanged();
                    }
                 }
